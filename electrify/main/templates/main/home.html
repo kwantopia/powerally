@@ -1,0 +1,27 @@
+{% extends "base_fluid.html" %}
+
+{% block content_body %}
+
+  <div class="row-fluid">
+    <div class="span9">
+      <div class="hero-unit">
+        <h1>Welcome to Power Ally</h1>
+      </div>
+    </div>
+    <div class="span3">
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          <li class="nav-header">Check out best rates!</li>
+          <form>
+            <input type="text" class="input-large" placeholder="Email">
+            <input type="text" class="input-large" placeholder="Zipcode">
+            <input type="text" class="input-large" placeholder="Account #">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </form>
+        </ul>
+      </div><!--/.well -->
+    </div><!--/span-->
+  </div>
+
+
+{% endblock content_body %}
