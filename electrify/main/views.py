@@ -24,9 +24,9 @@ def home(request):
     form = CustomerForm()
   else:
     # posting the form 
+    """
     form = CustomerForm(request.POST)
     if form.is_valid():
-      print "Form is valid"
       # save form
       email = form.cleaned_data["email"]
       zip_code = form.cleaned_data["zip_code"]
@@ -56,10 +56,8 @@ def home(request):
         account, created = AccountNumber.get_or_create(account_number=account_number)
         # assign the account number to user profile
         prof.account_numbers.add(account)
-
-      return HttpResponseRedirect(reverse("dashboard"))
-    
-    print "Form is not valid"
+      """
+    return HttpResponseRedirect(reverse("dashboard"))
 
   data["form"] = form
 
