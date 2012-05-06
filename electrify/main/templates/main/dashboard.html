@@ -51,8 +51,8 @@
           <tr>
             <td>{{ value.RepCompany }}</td>
             <td>{{ value.Product }}</td>
-            <td>{{ value.Kwh }}</td>
-            <td>{{ value.AvgPrice }}</td>
+            <td>$ {{ value.Kwh|floatformat:2 }}</td>
+            <td>{{ value.AvgPrice|floatformat:1 }} &cent;</td>
             <td>{{ value.Renewable }}</td>
             <td>{{ value.RateType }}</td>
             <td>{{ value.TermValue }}</td>

@@ -92,7 +92,7 @@ def dashboard(request):
       provider_data["RepCompany"] = row["RepCompany"]
       provider_data["Product"] = row["Product"]
       provider_data["Kwh"] = float(row["kwh1000"])*total_kw_hrs
-      provider_data["AvgPrice"] = float(row["kwh1000"])
+      provider_data["AvgPrice"] = float(row["kwh1000"])*100
       provider_data["Renewable"] = row["Renewable"]
       provider_data["RateType"] = row["RateType"]
       provider_data["TermValue"] = row["TermValue"]
@@ -100,4 +100,6 @@ def dashboard(request):
       provider_data["TermsURL"] = row["TermsURL"]
       provider_data["FactsURL"] = row["FactsURL"]
       data["provider_info"].append(provider_data)
+
+    data["provider_info"] = sorted(data["provider_info"], key=lambda value: value["Kwh"])
   return render_to_response("main/dashboard.html", data, context_instance=RequestContext(request))
