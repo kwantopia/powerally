@@ -88,6 +88,7 @@ def dashboard(request):
   total_kw_hrs = 881
 
   for row in csv_reader:
+    print "Appended"
     provider_data = {}
     if row["TduCompanyName"] == "ONCOR ELECTRIC DELIVERY COMPANY" and row["TermValue"] in ["0", "1"]:
       provider_data["RepCompany"] = row["RepCompany"]
@@ -102,22 +103,57 @@ def dashboard(request):
       provider_data["FactsURL"] = row["FactsURL"]
       data["provider_info"].append(provider_data)
 
-    data["provider_info"] = sorted(data["provider_info"], key=lambda value: value["Kwh"])
+  data["provider_info"] = sorted(data["provider_info"], key=lambda value: value["Kwh"])
 
-    data["chart_data"] = {}
-    for i, r in enumerate(data["provider_info"]):
-      if r["Product"].index("Reliant PowerTracker (R)"):
-        data["chart_data"]["current_plan"] = i
-        break
+  """
+  data["chart_data"] = {}
+  for i, r in enumerate(data["provider_info"]):
+    if r["Product"] == "Reliant PowerTracker (R)":
+      data["chart_data"]["current_plan"] = i
+      break
 
-    found = False
-    for i, r in enumerate(data["provider_info"]):
-      if not found and r["Renewable"] > data["provider_info"][data["chart_data"]["current_plan"]]["Renewable"]:
-        data["chart_data"]["greener_plan"] = i
-        found = True
-        
-      if r["Renewable"] == 100:
-        data["chart_data"]["greenest_plan"] = i
-        break
-        
+  found = False
+  for i, r in enumerate(data["provider_info"]):
+    if not found and r["Renewable"] > data["provider_info"][data["chart_data"]["current_plan"]]["Renewable"]:
+      data["chart_data"]["greener_plan"] = i
+      found = True
+      
+    if r["Renewable"] == 100:
+      data["chart_data"]["greenest_plan"] = i
+      break
+      
+  complete_len = len(data["provider_info"])
+  skip = complete_len/21
+  
+  data["final_provider_info"] = []
+  for i, r in enumerate(data["provider_info"]):
+    if i%skip and i not in [data["chart_data"]["current_plan"], data["chart_data"]["greener_plan"], data["chart_data"]["greenest_plan"]]:
+      data["final_provider_info"].append(r)
+
+  if data["provider_info"][:-1] != data["final_provider_info"][:-1]:
+    data["final_provider_info"].append(data["provider_info"][:-1])
+
+  data["final_provider_info"].append(data["provider_info"][data["chart_data"]["current_plan"]])
+  data["final_provider_info"].append(data["provider_info"][data["chart_data"]["greener_plan"]])
+  data["final_provider_info"].append(data["provider_info"][data["chart_data"]["greenest_plan"]])
+  print len(data["final_provider_info"])
+
+  data["final_provider_info"] = sorted(data["final_provider_info"], key=lambda value: value["Kwh"])
+
+  data["chart_data"] = {}
+  for i, r in enumerate(data["final_provider_info"]):
+    if r["Product"].index("Reliant PowerTracker (R)"):
+      data["chart_data"]["current_plan"] = i
+      break
+
+  found = False
+  for i, r in enumerate(data["final_provider_info"]):
+    if not found and r["Renewable"] > data["final_provider_info"][data["chart_data"]["current_plan"]]["Renewable"]:
+      data["chart_data"]["greener_plan"] = i
+      found = True
+      
+    if r["Renewable"] == 100:
+      data["chart_data"]["greenest_plan"] = i
+      break
+  """
   return render_to_response("main/dashboard.html", data, context_instance=RequestContext(request))
