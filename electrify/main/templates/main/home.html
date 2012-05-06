@@ -9,13 +9,29 @@
       </div>
     </div>
     <div class="span3">
+      <div class="row-fluid">
+        <div class="push-right">
+          <img width="200" src="{{ STATIC_URL }}imgs/logo.png">
+        </div>
+      </div>
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header">Check out best rates!</li>
-          <form>
-            <input type="text" class="input-large" placeholder="Email">
-            <input type="text" class="input-large" placeholder="Zipcode">
-            <input type="text" class="input-large" placeholder="Account #">
+          <li class="nav-header">Check out best rates for you!</li>
+          <form method="POST" action="{% url home %}">
+            {% csrf_token %}
+            {% if form.errors %}
+              <div class="control-group error">
+                {{ form.email }}
+                {{ form.zip_code }}
+                {{ form.account_number }}
+              </div>
+            {% else %}
+              <div class="control-group">
+                {{ form.email }}
+                {{ form.zip_code }}
+                {{ form.account_number }}
+              </div>
+            {% endif %}
             <button type="submit" class="btn btn-primary">Sign in</button>
           </form>
         </ul>
