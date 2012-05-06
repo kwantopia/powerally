@@ -6,7 +6,9 @@
 
     <div class="span9">
       Main body
-    <div>
+      <div id="chart-container" style="width:100%; height: 400px;">
+      </div>
+    </div>
     <div class="span3">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
@@ -32,3 +34,34 @@
   </div>
 
 {% endblock content_body %}
+
+{% block additional_scripts %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      chart1 = new Highcharts.Chart({
+         chart: {
+            renderTo: 'chart-container',
+            type: 'bar'
+         },
+         title: {
+            text: 'Fruit Consumption'
+         },
+         xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+         },
+         yAxis: {
+            title: {
+               text: 'Fruit eaten'
+            }
+         },
+         series: [{
+            name: 'Jane',
+            data: [1, 0, 4]
+         }, {
+            name: 'John',
+            data: [5, 7, 3]
+         }]
+      });        
+    });
+  </script>
+{% endblock additional_scripts %}
