@@ -40,12 +40,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Power Ally</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
               <li><a href="{% url about %}">About</a></li>
-              <li><a href="mailto:kwan.media@gmail.com">Contact</a></li>
+              <li><a href="{% url about %}">How it works</a></li>
+              <li><a href="{% url about %}">FAQ</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -86,7 +87,14 @@
       <hr>
 
       <footer>
-        <p>&copy; Company 2012</p>
+        <div class="row-fluid">
+          <div class="span11">
+            <p>&copy; Company 2012</p>
+          </div>
+          <div class="push-right span1">
+            <a href="mailto:kwan.media@gmail.com">Contact Us</a>
+          </div>
+        </div>
       </footer>
 
     </div> <!-- /container -->
