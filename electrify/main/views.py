@@ -4,11 +4,13 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.conf import settings
+
 from main.models import UserProfile, AccountNumber
 
 from main.forms import CustomerForm
 
-import uuid
+import uuid, csv
 
 def home(request):
   """
@@ -80,4 +82,24 @@ def dashboard(request):
 
   f = open(MEDIA_ROOT+'PTC_AllOffers_2012-05-05.csv', 'r')
 
+  csv_reader = csv.DictReader(f)
+
+  data["provider_info"] = [] 
+
+  total_kw_hrs = 881
+
+  for row in csv_reader:
+    provider_data = {}
+    if row["TduCompanyName"] == "ONCOR ELECTRIC DELIVERY COMPANY" and row["TermValue"] in ["0", "1"]:
+      provider_data["RepCompany"] = row["RepCompany"]
+      provider_data["Product"] = row["Product"]
+      provider_data["Kwh"] = float(row["kwh1000"])*total_kw_hrs
+      provider_data["AvgPrice"] = float(row["kwh1000"])
+      provider_data["Renewable"] = row["Renewable"]
+      provider_data["RateType"] = row["RateType"]
+      provider_data["TermValue"] = row["TermValue"]
+      provider_data["CancelType"] = row["CancelType"]
+      provider_data["TermsURL"] = row["TermsURL"]
+      provider_data["FactsURL"] = row["FactsURL"]
+      data["provider_info"].append(provider_data)
   return render_to_response("main/dashboard.html", data, context_instance=RequestContext(request))
