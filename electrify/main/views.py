@@ -21,7 +21,8 @@ def home(request):
 
   if request.method == "GET":
     # just getting the first landing page, fill form if they were filling things out
-    form = CustomerForm()
+    initial_data = {"email": "joesmith@gmail.com", "zip_code": "75212", "account_number": "A72342TT234208"}
+    form = CustomerForm(initial=initial_data)
   else:
     # posting the form 
     """
@@ -93,7 +94,7 @@ def dashboard(request):
       provider_data["Product"] = row["Product"]
       provider_data["Kwh"] = float(row["kwh1000"])*total_kw_hrs
       provider_data["AvgPrice"] = float(row["kwh1000"])*100
-      provider_data["Renewable"] = row["Renewable"]
+      provider_data["Renewable"] = int(row["Renewable"])
       provider_data["RateType"] = row["RateType"]
       provider_data["TermValue"] = row["TermValue"]
       provider_data["CancelType"] = row["CancelType"]
@@ -102,4 +103,21 @@ def dashboard(request):
       data["provider_info"].append(provider_data)
 
     data["provider_info"] = sorted(data["provider_info"], key=lambda value: value["Kwh"])
+
+    data["chart_data"] = {}
+    for i, r in enumerate(data["provider_info"]):
+      if r["Product"].index("Reliant PowerTracker (R)"):
+        data["chart_data"]["current_plan"] = i
+        break
+
+    found = False
+    for i, r in enumerate(data["provider_info"]):
+      if not found and r["Renewable"] > data["provider_info"][data["chart_data"]["current_plan"]]["Renewable"]:
+        data["chart_data"]["greener_plan"] = i
+        found = True
+        
+      if r["Renewable"] == 100:
+        data["chart_data"]["greenest_plan"] = i
+        break
+        
   return render_to_response("main/dashboard.html", data, context_instance=RequestContext(request))
